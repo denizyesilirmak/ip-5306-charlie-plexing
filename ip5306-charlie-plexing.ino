@@ -4,6 +4,12 @@
 #define LED_3 5
 #define LED_4 2
 
+#define chargingA 344 // kritik seviye
+#define chargingB 368 //tek led A - B
+#define chargingC 397 //çift led B - C
+#define chargingD 423  // üç led C - D 
+#define chargingE 452 // 4 led D - E   E'nin üstü full ledler sabit.
+
 int pins[] = {6, 3, 5};
 int nodes = 6;
 ChuckPlex plex = ChuckPlex(pins, 3);
@@ -33,20 +39,20 @@ void ledControl(int batteryLevelAdc, boolean isCharging)
       lastDebounceTime = millis();
     }
 
-    if (batteryLevelAdc < 368 && batteryLevelAdc >= 344)
+    if (batteryLevelAdc < chargingB && batteryLevelAdc >= chargingA)
     {
       if (direction)
         plex.enable(LED_1);
       else
         plex.clear();
     }
-    else if (batteryLevelAdc < 397 && batteryLevelAdc >= 368)
+    else if (batteryLevelAdc < chargingC && batteryLevelAdc >= chargingB)
     {
       plex.enable(LED_1); // 1.led
       if (direction)
         plex.enable(LED_2); // 2.led
     }
-    else if (batteryLevelAdc < 423 && batteryLevelAdc >= 397)
+    else if (batteryLevelAdc < chargingD && batteryLevelAdc >= chargingC)
     {
       plex.enable(LED_1);    // 1.led
       if (!direction)
@@ -59,7 +65,7 @@ void ledControl(int batteryLevelAdc, boolean isCharging)
 
 
     }
-    else if (batteryLevelAdc < 452 && batteryLevelAdc >= 423)
+    else if (batteryLevelAdc < chargingE && batteryLevelAdc >= chargingD)
     {
       plex.enable(LED_1);    // 1.led
       plex.enable(LED_2);    // 2.led
@@ -70,7 +76,7 @@ void ledControl(int batteryLevelAdc, boolean isCharging)
       if (direction)
         plex.write(LED_4, 32);
     }
-    else if (batteryLevelAdc >= 452)
+    else if (batteryLevelAdc >= chargingE)
     {
       plex.enable(LED_1);    // 1.led
       plex.enable(LED_2);    // 2.led
